@@ -1,11 +1,17 @@
 <script setup>
+// useRouter() : 라우터 인스턴스를 반환하는 함수
+// 라우터 인스턴스를 사용하여 페이지 이동 및 라우팅 처리
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+const store = useAuthStore();
 
 const router = useRouter();
 
 const logout = (e) => {
   // 실제 로그아웃 로직 구현 예정
-  router.push("/");
+  store.logout(); // 스토어의 로그아웃 액션 호출
+  router.push("/"); // 홈페이지로 이동
 };
 </script>
 
