@@ -128,7 +128,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 경로별 접근 권한 설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                .anyRequest().authenticated(); // 현재는 모든 접근 허용 (개발 단계)
-                .anyRequest().permitAll();
+                // 🌐 회원 관련 공개 API (인증 불필요)
+                .antMatchers(HttpMethod.GET, "/api/member/checkusername/**").permitAll()     // ID 중복 체크
+                .antMatchers(HttpMethod.POST, "/api/member").permitAll()                    // 회원가입
+                .antMatchers(HttpMethod.GET, "/api/member/*/avatar").permitAll()            // 아바타 이미지
+
+                // 🔒 회원 관련 인증 필요 API
+                .antMatchers(HttpMethod.PUT, "/api/member/**").authenticated() // 회원 정보 수정, 비밀번호 변경
+
+                .anyRequest().permitAll(); // 나머지 허용
     }
 
 
@@ -171,7 +179,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/assets/**",      // 정적 리소스
                 "/*",              // 루트 경로의 파일들
-                "/api/member/**",   // 회원 관련 공개 API
+//                "/api/member/**",   // 회원 관련 공개 API
 
                 // Swagger 관련 URL은 보안에서 제외
                 "/swagger-ui.html", "/webjars/**",
