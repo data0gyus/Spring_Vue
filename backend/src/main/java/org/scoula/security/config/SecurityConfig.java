@@ -136,6 +136,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 🔒 회원 관련 인증 필요 API
                 .antMatchers(HttpMethod.PUT, "/api/member/**").authenticated() // 회원 정보 수정, 비밀번호 변경
 
+                // 게시판 관련 인증 요구 경로
+                .antMatchers(HttpMethod.POST, "/api/board/**").authenticated() // 쓰기
+                .antMatchers(HttpMethod.PUT, "/api/board/**").authenticated()  // 수정
+                .antMatchers(HttpMethod.DELETE, "/api/board/**").authenticated() // 삭제
+
                 .anyRequest().permitAll(); // 나머지 허용
     }
 

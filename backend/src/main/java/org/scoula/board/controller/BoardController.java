@@ -4,12 +4,16 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.scoula.board.domain.BoardAttachmentVO;
 import org.scoula.board.dto.BoardDTO;
 import org.scoula.board.service.BoardService;
+import org.scoula.common.util.UploadFiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 @RestController   // REST API 컨트롤러 선언 (@Controller + @ResponseBody)
@@ -91,7 +95,7 @@ public class BoardController {
     @PostMapping("")
     public ResponseEntity<BoardDTO> create(
             @ApiParam(value = "게시글 객체", required = true)
-            @RequestBody BoardDTO board) {
+            BoardDTO board) {
         log.info("============> 게시글 생성: " + board);
 
         // 새 게시글 생성 후 결과 반환
@@ -122,7 +126,7 @@ public class BoardController {
             @ApiParam(value = "게시글 ID", required = true, example = "3")
             @PathVariable Long no,           // URL에서 게시글 번호 추출
             @ApiParam(value = "게시글 객체", required = true)
-            @RequestBody BoardDTO board      // 수정할 데이터 (JSON)
+            BoardDTO board      // 수정할 데이터 (JSON)
     ) {
         log.info("============> 게시글 수정: " + no + ", " + board);
 
@@ -164,4 +168,56 @@ public class BoardController {
 
 
     }
+
+// ----------------------------------------------------------------
+    /* 파일 관련 API 엔드포인트 추가*/
+
+    /**
+     * 파일 다운로드 API 엔드포인트
+     * @param no
+     * @param response
+     * @throws Exception
+     */
+    @ApiOperation(value = "첨부파일 다운로드", notes = "게시글의 첨부파일을 다운로드하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "파일 다운로드 성공"),
+            @ApiResponse(code = 404, message = "첨부파일을 찾을 수 없습니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @GetMapping("/download/{no}")
+    public void download(
+            @ApiParam(value = "첨부파일 ID", required = true, example = "1")
+            @PathVariable Long no,
+            HttpServletResponse response) throws Exception {
+        // 1. 첨부파일 정보 조회
+        BoardAttachmentVO attachment = service.getAttachment(no);
+
+        // 2. 실제 파일 객체 생성
+        File file = new File(attachment.getPath());
+
+        // 3. 파일 다운로드 처리 (브라우저로 전송)
+        UploadFiles.download(response, file, attachment.getFilename());
+    }
+
+
+    /**
+     * 첨부 파일 삭제 API 엔드포인트
+     * @param no
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "첨부파일 삭제", notes = "게시글의 첨부파일을 삭제하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "첨부파일 삭제 성공", response = Boolean.class),
+            @ApiResponse(code = 404, message = "첨부파일을 찾을 수 없습니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @DeleteMapping("/deleteAttachment/{no}")
+    public ResponseEntity<Boolean> deleteAttachment(
+            @ApiParam(value = "첨부파일 ID", required = true, example = "1")
+            @PathVariable Long no) throws Exception {
+        return ResponseEntity.ok(service.deleteAttachment(no));
+    }
+
+
 }

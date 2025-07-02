@@ -44,6 +44,7 @@ public class BoardServiceImpl implements BoardService {
         BoardVO vo = boardMapper.get(no);               // DB에서 VO 조회
         BoardDTO dto = BoardDTO.of(vo);                 // VO → DTO 변환
 
+        log.info("========================" + dto);
         return Optional.ofNullable(dto)                 // null 안전성 처리
                 .orElseThrow(NoSuchElementException::new);  // 없으면 예외 발생
 
@@ -76,8 +77,15 @@ public class BoardServiceImpl implements BoardService {
         log.info("update......" + board);
 
         boardMapper.update(board.toVo());  // 게시글 수정 수행
-        int affectedRows = boardMapper.update(board.toVo());  // 영향받은 행 수 반환
+//        int affectedRows = boardMapper.update(board.toVo());  // 영향받은 행 수 반환
 //        return affectedRows == 1;                        // 1개 행이 수정되면 성공
+
+        // 파일 업로드 처리
+        List<MultipartFile> files = board.getFiles();
+        if (files != null && !files.isEmpty()){
+            upload(board.getNo(),files);
+        }
+
         return get(board.getNo());
     }
 
@@ -96,7 +104,6 @@ public class BoardServiceImpl implements BoardService {
 //        return affectedRows == 1;                 // 1개 행이 삭제되면 성공
         // 삭제된 게시글 정보를 반환
         return board;
-
     }
 
 
@@ -113,7 +120,6 @@ public class BoardServiceImpl implements BoardService {
     public boolean deleteAttachment(Long no) {
         return boardMapper.deleteAttachment(no) == 1;
     }
-
 
 
     /**
@@ -140,6 +146,4 @@ public class BoardServiceImpl implements BoardService {
             }
         }
     }
-
-
 }
