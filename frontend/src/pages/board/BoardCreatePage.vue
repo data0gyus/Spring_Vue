@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 
 const auth = useAuthStore();
 const router = useRouter();
-const cr = useRoute();
+const cr = useRoute(); // 현재 라우트의 쿼리 정보를 그대로 전달
 
 const files = ref(null); // 파일 input 참조
 
@@ -89,7 +89,10 @@ const submit = async () => {
       >
         <i class="fa-solid fa-check"></i> 확인
       </button>
-      <router-link class="btn btn-primary" :to="{ name: 'board/list' }">
+      <router-link
+        class="btn btn-primary"
+        :to="{ name: 'board/list', query: cr.query }"
+      >
         <i class="fa-solid fa-list"></i> 목록
       </router-link>
     </div>
