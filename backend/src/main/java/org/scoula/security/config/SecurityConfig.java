@@ -81,12 +81,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 한글 문자 인코딩 필터 생성
      * @return CharacterEncodingFilter 인스턴스
      */
-    public CharacterEncodingFilter encodingFilter() {
-        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding("UTF-8");           // UTF-8 인코딩 설정
-        encodingFilter.setForceEncoding(true);         // 강제 인코딩 적용
-        return encodingFilter;
-    }
+//    public CharacterEncodingFilter encodingFilter() {
+//        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+//        encodingFilter.setEncoding("UTF-8");           // UTF-8 인코딩 설정
+//        encodingFilter.setForceEncoding(true);         // 강제 인코딩 적용
+//        return encodingFilter;
+//    }
 
 
     // AuthenticationManager 빈 등록 - JWT 토큰 인증에서 필요
@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
 
         http
-                .addFilterBefore(encodingFilter(), CsrfFilter.class)// 한글 인코딩 필터 설정
+//                .addFilterBefore(encodingFilter(), CsrfFilter.class)// 한글 인코딩 필터 설정
                 .addFilterBefore(authenticationErrorFilter, UsernamePasswordAuthenticationFilter.class) // 인증 에러 필터
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // Jwt 인증필터
                 .addFilterBefore(jwtUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  // API 로그인 인증 필터

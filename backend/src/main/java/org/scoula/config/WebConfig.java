@@ -34,12 +34,13 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     @Override
     protected Filter[] getServletFilters() {
         // UTF-8 문자 인코딩 필터 생성 및 설정
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-
-        return new Filter[] { characterEncodingFilter };
+//        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+//
+//        characterEncodingFilter.setEncoding("UTF-8");
+//        characterEncodingFilter.setForceEncoding(true);
+//
+//        return new Filter[] { characterEncodingFilter };
+        return new Filter[] {};
     }
 
     // 📍 파일 업로드 설정 상수
