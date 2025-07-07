@@ -13,7 +13,8 @@ import org.springframework.web.servlet.view.JstlView;
         "org.scoula.exception",    // 📍 예외 처리 패키지 추가, 우선 스캔되도록 앞에 작성
         "org.scoula.controller",     // Spring MVC용 컴포넌트 등록을 위한 스캔 패키지
         "org.scoula.board.controller",
-        "org.scoula.member.controller"
+        "org.scoula.member.controller",  // 회원 컨트롤러 스캔
+        "org.scoula.travel.controller"  // 회원 컨트롤러 스캔
 })
 public class ServletConfig implements WebMvcConfigurer {
 
