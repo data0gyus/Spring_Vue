@@ -49,7 +49,7 @@ class JwtProcessorTest {
     @Test
     void getUsername() {
         //  실제 테스트에서 생성된 토큰 사용
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMCIsImlhdCI6MTc1MDc1MTI1NSwiZXhwIjoxNzUwNzUxNTU1fQ.eWxZ1OpEnt3K1AYeR6Ddr7tqhvyfbpIkmP-UPtb-RpE";
+        String token = "~~ token";
 
         // JWT Subject(username) 추출
         String username = jwtProcessor.getUsername(token);
@@ -114,7 +114,7 @@ class JwtProcessorTest {
     /* 5분 경과 후 테스트 (수동으로 만료된 토큰 사용) */
     @Test
     void validateToken_Expired() {
-        String expiredToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMCIsImlhdCI6MTc1MDc1MTI1NSwiZXhwIjoxNzUwNzUxNTU1fQ.eWxZ1OpEnt3K1AYeR6Ddr7tqhvyfbpIkmP-UPtb-RpE";
+        String expiredToken = "~~ token";
 
 
         assertThrows(ExpiredJwtException.class, () -> {
